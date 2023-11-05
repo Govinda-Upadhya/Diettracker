@@ -12,4 +12,4 @@ class Food(models.Model):
       return f"{self.foodname} {self.calorie}"
 class Consume(models.Model):
    user=models.ForeignKey(User,on_delete=models.CASCADE)
-   food=models.ForeignKey(Food,on_delete=models.CASCADE)
+   food_consumed=models.ForeignKey(Food,on_delete=models.CASCADE)

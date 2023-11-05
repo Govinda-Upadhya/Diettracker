@@ -5,7 +5,7 @@ from .models import *
 class FoodAdmin(admin.ModelAdmin):
     list_display=('foodname','calorie')
 class ConsumerAdmin(admin.ModelAdmin):
-    list_display=('user','food')
+    list_display=('user','food_consumed')
 
 admin.site.register(Food,FoodAdmin)
 admin.site.register(Consume,ConsumerAdmin)
