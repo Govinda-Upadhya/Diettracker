@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .forms import *
+from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
 # Create your views here.
@@ -37,4 +38,8 @@ def signin(request):
 def delete(request):
     pass
 def tracker(request):
-    return HttpResponse("tracker")
+    foods=Food.objects.all()
+
+    return render(request,"diettracker/tracker.html",{
+        "foods":foods
+    })
