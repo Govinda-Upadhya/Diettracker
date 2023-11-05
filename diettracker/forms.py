@@ -6,13 +6,20 @@ class SignUpForm(forms.Form):
         for visible in self.visible_fields():
             visible.field.widget.attrs['placeholder'] = visible.field.label
 
-    username=forms.CharField(max_length=100,label="username")
-    first_name=forms.CharField(max_length=100,label="first_name")
-    last_name=forms.CharField(max_length=100,label="last_name")
-    email=forms.EmailField(label="email")
-    password=forms.CharField(widget=forms.PasswordInput,label="password")
-    reenter=forms.CharField(widget=forms.PasswordInput,label="confirm")
+    username=forms.CharField(max_length=100,label="Username")
+    first_name=forms.CharField(max_length=100,label="First Name")
+    last_name=forms.CharField(max_length=100,label="Last Name")
+    email=forms.EmailField(label="Email")
+    password=forms.CharField(widget=forms.PasswordInput,label="Password")
+    reenter=forms.CharField(widget=forms.PasswordInput,label="Confirm")
 class SignInForm(forms.Form):
-    username=forms.CharField(max_length=100)
-    password=forms.CharField(widget=forms.PasswordInput)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['class'] = 'un '
+        self.fields['password'].widget.attrs['class'] = 'pass '
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['placeholder'] = visible.field.label
+
+    username=forms.CharField(max_length=100,label="Username")
+    password=forms.CharField(widget=forms.PasswordInput,label="Password")
    

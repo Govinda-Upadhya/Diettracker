@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .forms import *
 from django.contrib.auth.models import User
+from django.contrib.auth import login,authenticate
 # Create your views here.
 def signup(request):
     signupform=SignUpForm()
@@ -16,14 +17,24 @@ def signup(request):
         user=User.objects.create_user(username=username,email=email,password=password)
         user.save()
         return redirect("signin")
-    return render(request,"diettracker/signup.html",{
+    return render(request,"diettracker/signup2.html",{
         'signupform':signupform,
     })
 
 def signin(request):
-    return HttpResponse("hello user")
+    signinform=SignInForm()
+    if request.method=="POST":
+        username=request.POST['username']
+        password=request.POST['password']
+
+        user=authenticate(username=username,password=password)
+        if user is not None:
+            return redirect('tracker')
+    return render(request,"diettracker/signin.html",{
+        "signinform":signinform
+    })
 
 def delete(request):
     pass
 def tracker(request):
-    pass
+    return HttpResponse("tracker")
