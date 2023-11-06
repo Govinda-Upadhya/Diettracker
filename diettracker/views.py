@@ -4,6 +4,9 @@ from .forms import *
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
+import requests
+import json
+#jqhijkYNLf40YrpKTcq6Gw==WSgjDzVr8XG3thvT
 # Create your views here.
 def signup(request):
     signupform=SignUpForm()
@@ -41,7 +44,24 @@ def delete(request):
 def tracker(request):
     foods=Food.objects.all()
     if request.method=="POST":
-        food=request.POST['food_consumed']
+        food=request.POST['query']
+        api_url = 'https://api.api-ninjas.com/v1/nutrition?query='
+        response = requests.get(api_url+food, headers={'X-Api-Key': 'jqhijkYNLf40YrpKTcq6Gw==WSgjDzVr8XG3thvT'})
+        api=json.loads(response.content)
+        data=api[0]
+        foodtaken=Food(foodname=data['name'],
+                        carbs=data['carbohydrates_total_g'],
+                        fats=data['fat_total_g'],
+                        calorie=data['calories'],
+                        protein=data['protein_g'])
+        khana=Food.objects.all()
+        exist=False
+        for i in khana:
+            if foodtaken.foodname==i.foodname:
+                exist=True
+                break
+        if exist==False:
+            foodtaken.save()
         consume = Food.objects.get(foodname=food)
         user = request.user
         consume = Consume(user=user,food_consumed=consume)
@@ -59,6 +79,8 @@ def tracker(request):
         calories=round(food.food_consumed.calorie+calories,2)
     total=protein+fats+calories
     dailygoal=(protein+fats+carbs+calories)/2000*100
+    if total==0:
+        total=1
     fats_percentage=fats/total*100
     protein_percentage=protein/total*100
     calories_percentage=calories/total*100
@@ -80,6 +102,7 @@ def tracker(request):
         'fats_percentage':fats_percentage,
         'protein_percentage':protein_percentage
     })
+
 def delete(request,id):
     consumed_food = Consume.objects.get(id=id)
     if request.method =='POST':
