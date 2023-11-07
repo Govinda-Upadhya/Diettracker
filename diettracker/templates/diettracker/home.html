@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Calorie Tracker</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'diettracker/home.css' %}">
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="card">
+                <div class="card_title">
+                    <h1>Daily Goal</h1>
+                
+                </div>
+                <div class="form">
+                    <form action="/home" method="POST">
+                        {% csrf_token %}
+                        {% for fields in dailygoals  %}
+                            {{fields.label_tag}}
+                            {{fields}}
+                            {{fields.errors}}
+                        {% endfor %}
+                        <input type="submit">
+                    </form>
+                </div>
+                <button type="submit"><a href="{% url "tracker" %}">Go to tracker</button>
+                
+            </div>
+           
+        </div>
+       
+        
+        <script src="" async defer></script>
+    </body>
+</html>

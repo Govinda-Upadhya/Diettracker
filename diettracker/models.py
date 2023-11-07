@@ -13,3 +13,9 @@ class Food(models.Model):
 class Consume(models.Model):
    user=models.ForeignKey(User,on_delete=models.CASCADE)
    food_consumed=models.ForeignKey(Food,on_delete=models.CASCADE)
+class Goals(models.Model):
+   user=models.ForeignKey(User,on_delete=models.CASCADE)
+   calorie_goal=models.FloatField()
+   protein_goal=models.FloatField()
+   fats_goal=models.FloatField()
+   carbohydrate_goal=models.FloatField()

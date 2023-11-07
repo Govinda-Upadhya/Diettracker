@@ -22,3 +22,8 @@ class SignInForm(forms.Form):
 
     username=forms.CharField(max_length=100,label="Username")
     password=forms.CharField(widget=forms.PasswordInput,label="Password")
+class DailyGoalForm(forms.Form):
+    calorie_goal=forms.FloatField()
+    protein_goal=forms.FloatField()
+    fats_goal=forms.FloatField()
+    carbohydrate_goal=forms.FloatField()

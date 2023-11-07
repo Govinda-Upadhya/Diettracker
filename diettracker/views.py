@@ -21,7 +21,7 @@ def signup(request):
         user=User.objects.create_user(username=username,email=email,password=password)
         user.save()
         return redirect("signin")
-    return render(request,"diettracker/signup2.html",{
+    return render(request,"diettracker/signup.html",{
         'signupform':signupform,
     })
 
@@ -34,15 +34,15 @@ def signin(request):
         user=authenticate(username=username,password=password)
         if user is not None:
             login(request,user=user)
-            return redirect('tracker')
+            return redirect('home')
     return render(request,"diettracker/signin.html",{
         "signinform":signinform
     })
 
-def delete(request):
-    pass
 def tracker(request):
     foods=Food.objects.all()
+    goal=Goals.objects.filter(user=request.user)
+    goals=goal[len(goal)-1]
     if request.method=="POST":
         food=request.POST['query']
         api_url = 'https://api.api-ninjas.com/v1/nutrition?query='
@@ -54,9 +54,9 @@ def tracker(request):
                         fats=data['fat_total_g'],
                         calorie=data['calories'],
                         protein=data['protein_g'])
-        khana=Food.objects.all()
+        
         exist=False
-        for i in khana:
+        for i in foods:
             if foodtaken.foodname==i.foodname:
                 exist=True
                 break
@@ -77,13 +77,13 @@ def tracker(request):
         fats=round(food.food_consumed.fats+fats,2)
         carbs=round(food.food_consumed.carbs+carbs,2)
         calories=round(food.food_consumed.calorie+calories,2)
-    total=protein+fats+calories
-    dailygoal=(protein+fats+carbs+calories)/2000*100
-    if total==0:
-        total=1
-    fats_percentage=fats/total*100
-    protein_percentage=protein/total*100
-    calories_percentage=calories/total*100
+    
+    
+    
+    fats_percentage=fats/goals.fats_goal*100
+    protein_percentage=protein/goals.protein_goal*100
+    calories_percentage=calories/goals.calorie_goal*100
+    carbs_percentage=carbs/goals.carbohydrate_goal*100
     breakdown={
         "Fats":fats_percentage,
         "Protein":protein_percentage,
@@ -91,18 +91,32 @@ def tracker(request):
     }
     return render(request,"diettracker/tracker.html",{
         "foods":foods,
+        "goals":goals,
         'consumed_food':consumed_food,
         'protein':protein,
         "carbs":carbs,
         "fats":fats,
         "calories":calories,
-        "dailygoal":dailygoal,
         "breakdown":breakdown,
         "calories_percentage":calories_percentage,
         'fats_percentage':fats_percentage,
-        'protein_percentage':protein_percentage
+        'protein_percentage':protein_percentage,
+        'carbs_percentage':carbs_percentage
     })
-
+def home(request):
+    goalform=DailyGoalForm(request.POST)
+    if request.method=="POST":
+        goalform=DailyGoalForm(request.POST)
+        if goalform.is_valid():
+            calorie_goal=goalform.cleaned_data['calorie_goal']
+            protein_goal=goalform.cleaned_data['protein_goal']
+            fats_goal=goalform.cleaned_data['fats_goal']
+            carbohydrate_goal=goalform.cleaned_data['carbohydrate_goal']
+            goals=Goals(user=request.user,calorie_goal=calorie_goal,protein_goal=protein_goal,fats_goal=fats_goal,carbohydrate_goal=carbohydrate_goal)
+            goals.save()
+    return render(request,"diettracker/home.html",{
+        "dailygoals":goalform
+    })
 def delete(request,id):
     consumed_food = Consume.objects.get(id=id)
     if request.method =='POST':

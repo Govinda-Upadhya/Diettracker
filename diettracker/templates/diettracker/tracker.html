@@ -9,28 +9,28 @@
             <div class="row">
                 <div class="col-md-12">
                     <nav class="navbar navbar-dark bg-primary">
-                        <span class="navbar-brand">Calorie Tracker</span>
+                        <h1 style="text-align: center;" class="navbar-brand">Diet Tracker</h1>
                     </nav>
                 </div>
             </div>
  
             <br><br><br>
  
-            <h4>Calorie Goal</h4>
-            <br>
+            
             <div class="row">
                 <div class="col-md-9 offset-1">
-                    <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: {{dailygoal}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
- 
-                    </div>
+                    Today's Goal
+                    {{goals.carbohydrate_goal}}
+                    {{goals.protein_goal}}
+                    {{goals.fats_goal}}
+                    {{goals.calorie_goal}}
                 </div>
             </div>
             <br><br>
             <div class="row">
                 <div class="col-md-12">
                         
-                        <form method="POST">
+                        <form method="POST" action="/tracker">
                             <div class="form-group row">
                                 {% csrf_token %}
                                 <label class="col-md-2">
@@ -93,19 +93,23 @@
                     </div>
                     <div class="col-md-12">
                         
-                        <h3>Calories</h3>
+                        <h3>Carbohydrate</h3>
                         <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: {{calories_percentage}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{carbs_percentage}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
                         </div>
                         
                         <h3>Protein</h3>
                         <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: {{protein_percentage}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{protein_percentage}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
                         </div>
 
                         <h3>Fats</h3>
                         <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: {{fats_percentage}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{fats_percentage}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
+                        </div>
+                        <h3>Calories</h3>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{dailygoal}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
                         </div>
                         
                     </div>
