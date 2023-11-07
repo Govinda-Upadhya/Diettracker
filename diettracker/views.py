@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
 import requests
 import json
-#jqhijkYNLf40YrpKTcq6Gw==WSgjDzVr8XG3thvT
+
 # Create your views here.
 def signup(request):
     signupform=SignUpForm()
@@ -71,24 +71,15 @@ def tracker(request):
     carbs=0
     calories=0
     fats=0
-    total=0
     for food in consumed_food:
         protein=round(food.food_consumed.protein+protein,2)
         fats=round(food.food_consumed.fats+fats,2)
         carbs=round(food.food_consumed.carbs+carbs,2)
         calories=round(food.food_consumed.calorie+calories,2)
-    
-    
-    
     fats_percentage=fats/goals.fats_goal*100
     protein_percentage=protein/goals.protein_goal*100
     calories_percentage=calories/goals.calorie_goal*100
     carbs_percentage=carbs/goals.carbohydrate_goal*100
-    breakdown={
-        "Fats":fats_percentage,
-        "Protein":protein_percentage,
-        "Calories":calories_percentage
-    }
     return render(request,"diettracker/tracker.html",{
         "foods":foods,
         "goals":goals,
@@ -97,7 +88,6 @@ def tracker(request):
         "carbs":carbs,
         "fats":fats,
         "calories":calories,
-        "breakdown":breakdown,
         "calories_percentage":calories_percentage,
         'fats_percentage':fats_percentage,
         'protein_percentage':protein_percentage,
@@ -123,3 +113,9 @@ def delete(request,id):
         consumed_food.delete()
         return redirect('tracker')
     return render(request,'diettracker/delete.html')
+def deleteall(request):
+    consumed_food = Consume.objects.filter(user=request.user)
+    if request.method =='POST':
+        consumed_food.delete()
+        return redirect('tracker')
+    return render(request,'diettracker/deleteall.html')
