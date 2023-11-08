@@ -8,6 +8,7 @@ import requests
 import json
 
 # Create your views here.
+#This function handles the signin functionality of the webapp
 def signup(request):
     signupform=SignUpForm()
     if request.method=="POST":
@@ -24,7 +25,7 @@ def signup(request):
     return render(request,"diettracker/signup.html",{
         'signupform':signupform,
     })
-
+#This function handles the signin functionality of the webapp
 def signin(request):
     signinform=SignInForm()
     if request.method=="POST":
@@ -39,10 +40,12 @@ def signin(request):
         "signinform":signinform
     })
 
+
 def tracker(request):
     foods=Food.objects.all()
     goal=Goals.objects.filter(user=request.user)
     goals=goal[len(goal)-1]
+    #api call to get the macronutrient of any food the user searches
     if request.method=="POST":
         food=request.POST['query']
         api_url = 'https://api.api-ninjas.com/v1/nutrition?query='
@@ -93,8 +96,8 @@ def tracker(request):
         'protein_percentage':protein_percentage,
         'carbs_percentage':carbs_percentage
     })
+#this function handles all the personal daily goals of the users
 def home(request):
-    goalform=DailyGoalForm(request.POST)
     if request.method=="POST":
         goalform=DailyGoalForm(request.POST)
         if goalform.is_valid():
@@ -107,6 +110,7 @@ def home(request):
     return render(request,"diettracker/home.html",{
         "dailygoals":goalform
     })
+# the following two function is responsible for deleting one or all the food items respectively
 def delete(request,id):
     consumed_food = Consume.objects.get(id=id)
     if request.method =='POST':
