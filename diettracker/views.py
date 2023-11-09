@@ -98,15 +98,8 @@ def tracker(request):
     })
 #this function handles all the personal daily goals of the users
 def home(request):
-<<<<<<< HEAD
-<<<<<<< HEAD
     goalform=DailyGoalForm()
-=======
 
->>>>>>> bf9bc7047bf151ce8973cb19d33b69039bf20e93
-=======
-
->>>>>>> d06dfa3dd6fb4987f1b7d0b83931799911155474
     if request.method=="POST":
         goalform=DailyGoalForm(request.POST)
         if goalform.is_valid():
